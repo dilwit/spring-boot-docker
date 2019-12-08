@@ -1,0 +1,3 @@
+service:
+  pong:
+    url: 'http://localhost:8080/pong'
