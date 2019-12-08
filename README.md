@@ -31,6 +31,9 @@
 
         # With spring profile
         docker run -e "SPRING_PROFILES_ACTIVE=stg" -p 8089:8080 -t dilwit/spring-boot-docker/ping
+	
+	# When spring config file is mounted to host (see docker file as well)
+	docker run -p 8089:8080 -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config:ro dilwit/spring-boot-docker/ping
 
 #### DockerCompose depends on docker-compose.yml
 - help you run multiple containers
