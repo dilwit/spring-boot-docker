@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  ping:
+    build:
+      context: ../ping
+      dockerfile: ./Dockerfile
+    image: dilwit/spring-boot-docker/ping
+    ports:
+      - 8085:8080
+    environment:
+      - SERVICE_PONG_URL=http://pong:8080/pong
+
+  pong:
+    build:
+      context: ../pong
+      dockerfile: ./Dockerfile
+    image: dilwit/spring-boot-docker/pong
+    ports:
+      - 8086:8080
+    depends_on:
+      - ping
