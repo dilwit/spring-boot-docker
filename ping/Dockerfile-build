@@ -1,0 +1,9 @@
+FROM maven:3.5.4-jdk-10-slim
+WORKDIR /tmp
+COPY . /tmp
+RUN mvn package -DskipTests
+
+WORKDIR /tmp
+RUN cp /tmp/target/*.jar ./ping.jar
+EXPOSE 8080
+CMD ["java", "-jar", "ping.jar"]

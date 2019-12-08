@@ -1,0 +1,9 @@
+FROM gradle:4.7.0-jdk8-alpine
+WORKDIR /home/gradle
+COPY --chown=gradle:gradle . /home/gradle
+RUN gradle build -x test --stacktrace
+
+WORKDIR /home/gradle
+RUN cp /home/gradle/build/libs/*.jar ./pong.jar
+EXPOSE 8080
+CMD ["java", "-jar", "pong.jar"]
