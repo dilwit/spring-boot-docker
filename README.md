@@ -18,7 +18,10 @@
 # Build With standard DockerFile:
 
         ./mvnw clean install -DskipTests
+	mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
         docker build -t dilwit/spring-boot-docker/ping .
+	docker run -p 8089:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log -t dilwit/spring-boot-docker/ping
+	
         OR
         ./mvnw install dockerfile:build
 	OR
