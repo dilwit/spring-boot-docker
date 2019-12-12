@@ -18,19 +18,28 @@
 # Build With standard DockerFile:
 
         ./mvnw clean install -DskipTests
+	mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
         docker build -t dilwit/spring-boot-docker/ping .
-        OR
-        ./mvnw install dockerfile:build
+	docker run -p 8085:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log -t dilwit/spring-boot-docker/ping
+	
 	OR
         ./gradlew clean build -x test
-        docker build --build-arg JAR_FILE=build/libs/*.jar -t dilwit/spring-boot-docker/pong .
+	mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
+	docker build --build-arg DEPENDENCY=build/dependency -t dilwit/spring-boot-docker/pong .
+	docker run -p 8086:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/pong/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/pong/log:/app/log -t dilwit/spring-boot-docker/pong
 
-        docker run -p 8089:8080 -t dilwit/spring-boot-docker/ping
         [tomcat stared on port 8080 within the container but mapped 8089 to the host]
         curl http://localhost:8089
 
         # With spring profile
         docker run -e "SPRING_PROFILES_ACTIVE=stg" -p 8089:8080 -t dilwit/spring-boot-docker/ping
+	
+	# When spring config dir is mounted to host (see docker file as well)
+	docker run -p 8089:8080 -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config:ro dilwit/spring-boot-docker/ping
+
+	# When spring config dir and log are mounted to host (see docker file as well)
+	docker run -p 8089:8080 -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config:ro -v /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log dilwit/spring-boot-docker/ping
+
 
 #### DockerCompose depends on docker-compose.yml
 - help you run multiple containers
