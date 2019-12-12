@@ -20,15 +20,14 @@
         ./mvnw clean install -DskipTests
 	mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
         docker build -t dilwit/spring-boot-docker/ping .
-	docker run -p 8089:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log -t dilwit/spring-boot-docker/ping
+	docker run -p 8085:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log -t dilwit/spring-boot-docker/ping
 	
-        OR
-        ./mvnw install dockerfile:build
 	OR
         ./gradlew clean build -x test
-        docker build --build-arg JAR_FILE=build/libs/*.jar -t dilwit/spring-boot-docker/pong .
+	mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
+	docker build --build-arg DEPENDENCY=build/dependency -t dilwit/spring-boot-docker/pong .
+	docker run -p 8086:8080 -e "SPRING_PROFILES_ACTIVE=dilwit" -v /Users/dilusha.withanage/app/spring-boot-docker/pong/config:/app/config -v /Users/dilusha.withanage/app/spring-boot-docker/pong/log:/app/log -t dilwit/spring-boot-docker/pong
 
-        docker run -p 8089:8080 -t dilwit/spring-boot-docker/ping
         [tomcat stared on port 8080 within the container but mapped 8089 to the host]
         curl http://localhost:8089
 
