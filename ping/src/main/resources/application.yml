@@ -4,4 +4,4 @@ spring:
 
 service:
   pong:
-    url: 'http://localhost:8080/pong'
+    url: 'http://localhost:9000/pong'

@@ -8,7 +8,11 @@ services:
     image: dilwit/spring-boot-docker/ping
     ports:
       - 8085:8080
+    volumes:
+      - /Users/dilusha.withanage/app/spring-boot-docker/ping/config:/app/config
+      - /Users/dilusha.withanage/app/spring-boot-docker/ping/log:/app/log
     environment:
+      - "SPRING_PROFILES_ACTIVE=dilwit"
       - SERVICE_PONG_URL=http://pong:8080/pong
 
   pong:
@@ -18,5 +22,10 @@ services:
     image: dilwit/spring-boot-docker/pong
     ports:
       - 8086:8080
+    volumes:
+        - /Users/dilusha.withanage/app/spring-boot-docker/pong/config:/app/config
+        - /Users/dilusha.withanage/app/spring-boot-docker/pong/log:/app/log
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dilwit"
     depends_on:
       - ping

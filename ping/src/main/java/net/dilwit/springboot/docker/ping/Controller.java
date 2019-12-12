@@ -1,5 +1,7 @@
 package net.dilwit.springboot.docker.ping;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class Controller {
+
+    Logger logger = LoggerFactory.getLogger(Controller.class);
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -22,6 +26,7 @@ public class Controller {
     @RequestMapping("/")
     public String home() {
 
+        logger.info("request for / is received");
         StringBuilder message = new StringBuilder();
         message.append("Hello Docker - PING").append("\n")
                 .append("Active profile: ").append(activeProfile).append("\n");
@@ -32,6 +37,7 @@ public class Controller {
     @RequestMapping("/ping")
     public String getPing() {
 
+        logger.info("request for /ping is received");
         StringBuilder message = new StringBuilder();
         message.append("PING");
 
@@ -41,6 +47,7 @@ public class Controller {
     @RequestMapping("/pingPong")
     public String getPingPong() {
 
+        logger.info("request for /pingPong is received");
         StringBuilder message = new StringBuilder();
         message.append(getPing());
 

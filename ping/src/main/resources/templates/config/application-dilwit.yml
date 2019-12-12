@@ -1,3 +1,6 @@
+spring:
+  profiles:
+    active: dilwit
 service:
   pong:
-    url: 'http://localhost:8080/pong'
+    url: 'http://localhost:8086/pong'

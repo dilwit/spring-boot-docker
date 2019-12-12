@@ -6,25 +6,17 @@ LABEL maintainer="dilusha.withanage@gmail.com"
 
 #Set app home folder
 ENV APP_HOME /app
-#Possibility to set JVM options (https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html)
-ENV JAVA_OPTS=""
+##Possibility to set JVM options (https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html)
+#ENV JAVA_OPTS=""
 
-#Create base app folder
-RUN mkdir $APP_HOME
-#Create folder to save configuration files
-RUN mkdir $APP_HOME/config
-#Create folder with application logs
-RUN mkdir $APP_HOME/log
-
-
-# Add a volume pointing to /tmp
+# Add a volume pointing
+# The effect is to create a temporary file on your host under "/var/lib/docker" and link it to the container under "/tmp".
 VOLUME $APP_HOME/log
 VOLUME $APP_HOME/config
 
-WORKDIR $APP_HOME
-
-# Add the application's jar to the container
-COPY target/*.jar ping.jar
-
-# Run the jar file
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","ping.jar"]
+ARG DEPENDENCY=target/dependency
+COPY ${DEPENDENCY}/BOOT-INF/lib $APP_HOME/lib
+COPY ${DEPENDENCY}/META-INF $APP_HOME/META-INF
+COPY ${DEPENDENCY}/BOOT-INF/classes $APP_HOME
+COPY ${DEPENDENCY}/BOOT-INF/classes/templates/config $APP_HOME
+ENTRYPOINT ["java", "-cp","app:app/lib/*","net.dilwit.springboot.docker.ping.PingApplication"]
